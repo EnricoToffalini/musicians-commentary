@@ -1,0 +1,57 @@
+---
+title: "Musicians, Memory, and General Cognitive Ability: A Commentary on Grassi et al. (2025)"
+shorttitle: "Musicians, Memory, and g"
+author:
+  - name: Enrico Toffalini
+    corresponding: true
+    orcid: 0009-0001-4661-8063
+    email: enrico.toffalini@unipd.it
+    affiliations:
+      - name: University of Padua
+        department: Department of General Psychology
+        address: 8 Via Venezia
+        city: Padua
+        region: PD
+        country: Italy
+  - name: Tommaso Feraco
+    corresponding: false
+    orcid: 0000-0002-8920-5330
+    email: tommaso.feraco@unipd.it
+    affiliations:
+      - name: University of Padua
+        department: Department of General Psychology
+        address: 8 Via Venezia
+        city: Padua
+        region: PD
+        country: Italy
+author-note:
+  disclosures:
+    data-sharing: ~
+    financial-support: ~
+keywords: [Keyword 1, Keyword 2, Keyword 3]
+bibliography: bibliography.bib
+format:
+  apaquarto-pdf:
+    documentmode: man
+---
+
+@grassiMusiciansHaveBetter2025 provide the strongest dataset to date on cognitive differences between musicians and nonmusicians. Their contribution is exemplary in scale, openness, and collaborative rigor, and shows how a literature long constrained by underpowered studies and heterogeneous protocols can be meaningfully advanced. Their core empirical contribution is not in question. Here, we focus on a narrower but theoretically important issue, the level at which the cognitive findings can be most meaningfully interpreted.
+
+The article tests whether musicians outperform nonmusicians not only on music memory, where a large effect is unsurprising, but also on verbal and visuospatial short-term memory, where any differences were less obvious a priori. The discussion appropriately considers several hypotheses, including music-specific transfer, broader cognitive differences, and selection effects. However, its interpretation remains closer to a task-by-task reading of the cognitive results than is warranted by the broader theory of cognitive individual differences.
+
+In intelligence research, the observation of a positive manifold across cognitive-task performances is a pivotal starting point, and the still-dominant mainstream view is that it reflects common causes captured by the “general factor” [@spearman1904g; @coyleDefiningMeasuringIntelligence2021], whose neurobiological and genetic roots are increasingly being recognized [@dearyGeneticVariationBrain2022]. This remains central to mainstream psychometric theories of individual differences in cognitive abilities, and more broadly, theories that focus on latent variables. Whether one prefers the language of general intelligence, common cognitive variance, or a general latent factor, the substantive implication is the same: observed tasks are not psychologically independent simply because they are superficially different. When several indicators covary, the first question is whether group differences are expressed at the level of shared or nonshared variance, not whether each observed task should be treated separately as evidence for a distinct ability-specific advantage.
+
+This matters directly here. Grassi et al. measured not only memory tasks but also Raven, Wechsler Vocabulary, and n-back performance. These scores were then entered into mixed-effects models as control variables, encouraging an interpretation in which they are treated either as direct determinants of memory performance or, more pragmatically, as variables to be conditioned on when asking whether musicians still outperform nonmusicians at the same level of selected cognitive abilities [but even this second strategy carries a substantial risk of spurious conclusions, @westfallStatisticallyControllingConfounding2016]. In their discussion, the authors themselves noted that the broadly positive pattern across cognitive variables may reflect a more general cognitive advantage, with the clearest and largest difference emerging when the task is closest to musical expertise. We believe this should not remain a side note, but should instead guide a more parsimonious and theoretically meaningful interpretation of the findings.
+
+We reanalyzed the data following the mainstream view that common variance among cognitive measures should be modeled first. The cognitive tasks, however, do not appear to have been selected with an explicit measurement model in mind. We therefore fit a one-factor model to the six cognitive measures, Vocabulary, Raven, n-back, digit span, spatial span, and melody span, while allowing for a small number of residual correlations. We then estimated the latent-variable models in the R package lavaan [@rosseel2012lavaan]. Musicians and nonmusicians were perfectly or nearly perfectly matched on age, sex/gender, and years of education, whereas they differed modestly in socioeconomic status (SES), with Cohen’s d = 0.34 in favor of musicians. We therefore adjusted only for SES when testing group effects, to avoid unnecessary model complexity, while recognizing that the causal status of SES in this context remains unclear. Group effects were examined in two complementary ways: first, through multigroup confirmatory factor analyses (CFA) within a standard measurement-invariance framework, up to testing equality of the latent mean of g; second, through multilevel structural equation models (SEM), in which group directly predicted common versus task-specific variance, while country-level clustering was accounted for through random intercepts on the observed variables. Because lavaan did not allow simultaneous multigroup and multilevel estimation, these approaches had to be implemented separately. SES was included throughout as a covariate when testing group effects. Model fit was evaluated using RMSEA, CFI, and BIC for model comparisons, and statistical significance was assessed at the level of model coefficients (p \< .05).
+
+The multigroup invariance analyses supported configural invariance, RMSEA = .027 and CFI = .986, and metric invariance, RMSEA = .027 and CFI = .983, with BIC improving from 19525.73 to 19497.20. Partial scalar invariance was also supported once the intercept of melody span was freed, RMSEA = .034, CFI = .970, with a further improvement in BIC to 19481.95. By contrast, strict invariance was not supported, RMSEA = .063, CFI = .874, BIC = 19511.69. This pattern suggests that the factor loadings, and most intercepts, were sufficiently comparable across musicians and nonmusicians, whereas residual variances were not. Importantly, the lack of strict invariance did not reflect a uniform tendency toward greater residual dispersion in one group, but rather indicator-specific differences with no clear directional pattern. Constraining the latent mean of g to equality also worsened fit, RMSEA = .058, CFI = .908, BIC = 19518.63, indicating that the groups differed at the latent level. In the partially scalar model, the estimated latent mean difference was about 0.53 latent standard deviations in favor of musicians, which can be interpreted as a standardized latent mean difference. Thus, the multigroup results support a parsimonious account in which musician status is associated primarily with higher general cognitive variance, while melody span also shows clear noninvariance at the intercept level, consistent with an additional task-specific advantage. SES positively predicted g in both groups, with standardized coefficients of about .17 in nonmusicians and .25 in musicians. Overall, the partially scalar model was the best-fitting and most defensible among those tested.
+
+The multilevel SEM reanalysis pointed in the same general direction, while also refining the decomposition of group differences. Among the multilevel models considered, the best-fitting solution was the one in which group predicted the latent factor g and, in addition, retained direct residual paths only to Vocabulary and melody span, RMSEA = .026, CFI = .982, BIC = 19141.64. At the within-country level, which is the only level we interpreted substantively, musician status predicted higher latent g after adjustment for SES, with a standardized effect of about .21. SES also positively predicted latent g, standardized coefficient about .20. Beyond this general effect, the model suggested a modest residual advantage for Vocabulary, standardized effect about .08, and a much larger residual advantage for melody span, standardized effect about .43. This is an important complement to the multigroup results, because it indicates that most of the musician advantage is captured at the latent level, but not all of it: melody span clearly retains substantial task-specific variance associated with musician status, and Vocabulary may retain a smaller additional component as well. The between-country part of the model was included only to absorb clustering and cross-national differences in average performance, not for substantive interpretation.
+
+Both reanalyses suggest that the musician advantage is expressed primarily at the latent level, with a clear additional specificity for melody span and, possibly, a smaller residual effect for Vocabulary. This does is not a denial of the original empirical findings, but offers a more parsimonious account within a methodological framework that is batter aligned with the still-dominant mainstream on individual differences in cognitive abilities. The point is not just to distinguish between “significant” and “nonsignificant” task differences. It is to clarify the most appropriate explanatory framework: whether a set of observed scores should be interpreted as a collection of separate outcomes, with their covariances representing a nuisance that should be removed through pragmatical analytical choices (e.g., covarying predictors in linear models), or whether the overall pattern is better understood as the surface expression of common cognitive variance. This matters beyond the present article. Large collaborative datasets are a major advance for the field, and their value can be strengthened even further when they are paired with designs that more fully reflect the hierarchical structure of cognitive abilities [@mcgrewCHCTheoryHuman2009]. When indicators are positively manifolded, modeling them jointly can help reveal whether apparently distinct group differences are better interpreted as manifestations of a broader common factor. Therefore, advances in data collection can and should be matched by equally strong advances in measurement modeling, yielding interpretations that are both more integrated and more deeply theoretically informative.
+
+# References
+
+::: {#refs}
+:::

@@ -1,0 +1,5 @@
+"","Model","Description","ChiSquare","df","p","RMSEA","CFI","BIC","Delta_BIC"
+"1","MV0_g_only","group differences and SES modeled only at the latent g level",297.055,31,0,0.085,0.777,19362.101,228.55
+"2","MV1_observed_only","group differences and SES modeled only at observed-variable level",34.588,21,0.0313,0.023,0.989,19170.535,36.984
+"3","MV2_g_plus_observed","group differences and SES modeled at latent g plus observed-variable level (except digit span)",34.588,21,0.0313,0.023,0.989,19170.535,36.984
+"4","MV3_g_plus_targeted_residuals","group differences and SES modeled at latent g plus group differences direct effects on vocabulary and melody",54.324,29,0.003,0.027,0.979,19133.551,0
