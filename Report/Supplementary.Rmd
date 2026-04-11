@@ -166,7 +166,7 @@ Finally, when latent means were constrained equal, fit worsened again. This is t
 
 ## Preferred multigroup representation
 
-```{r fig-s1, fig.cap="Figure S1. Preferred multigroup representation. Dual values separated by a slash denote the two groups for group-specific quantities such as residual variances or residual covariances."}
+```{r fig-s1, fig.cap="Figure S1. Preferred multigroup representation. Dual values separated by a slash denote the two groups for group-specific quantities such as residual variances or residual covariances: left values for non-musicians, right values for musicians. Triangles (representing intercepts) indicate where group differences in mean values emerged."}
 knitr::include_graphics("../Figures/Figure1_MG.png")
 ```
 
@@ -236,7 +236,5 @@ This matters for interpretation. The original empirical facts remain intact, but
 
 # Reproducibility note
 
-This `.Rmd` file is concise and does not feature all R analyses that were performed. The full  . It uses the precomputed tables stored in `/Tables` and the diagrams stored in `/Figures`, rather than re-running the full SEM workflow during knitting. This keeps the supplementary document easy to audit and stable across machines.
-
-The underlying analyses were based on the same dataset used in the commentary project and were originally carried out in `lavaan`. Full scripts, raw console outputs, and intermediate model objects can be archived separately if desired. The present supplement is designed to be the readable technical companion to the commentary, not the full analysis log.
+This RMarkDown output is concise and does not feature all R analyses that were performed. Also, the file reuses the precomputed tables stored in `/Tables` and the diagrams stored in `/Figures`, rather than re-running the full SEM workflow during knitting. However, the full R code for reproducibility is available via the GitHub repository: https://github.com/EnricoToffalini/musicians-commentary 
 

@@ -31,7 +31,6 @@ melody_span ~ 1
 fit_mv_0 = sem(model_alt_mv_0, data = df, cluster="country")
 fitMeasures(fit_mv_0, fi)
 
-
 model_alt_mv_1 = "
 level: 1
 g =~ NA*raven + waisvocabulary + raven + nback + spatial_span + digit_span + melody_span
