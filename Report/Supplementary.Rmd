@@ -140,7 +140,7 @@ The correlations are not identical across groups, but they are similar enough in
 
 Two complementary SEM strategies were used.
 
-First, we fitted a **multigroup CFA / invariance sequence**. The latent factor `g` was defined by Raven, Wechsler Vocabulary, n-back, Spatial span, Digit span, and Melody span. The latent variance of `g` was fixed to 1 in both groups. SES was specified as a predictor of `g`. Three residual covariances were included throughout: Vocabulary with Spatial span, Spatial span with Digit span, and Digit span with Melody span.
+First, we fitted a **multigroup CFA / invariance sequence**. The latent factor `g` was defined by Raven, Wechsler Vocabulary, n-back, Spatial span, Digit span, and Melody span. The latent variance of `g` was fixed to 1 in both groups. SES was specified as a predictor of `g`. Three residual covariances were included throughout: Vocabulary with Spatial span, Spatial span with Digit span, and Digit span with Melody span. Residual covariances were selected on the baseline model inspecting modification indices. 
 
 Second, because the original study was multilab and cross-national, we fitted a **multilevel SEM** with clustering by country. This model cannot reproduce the exact multigroup design simultaneously (in `lavaan`), but it provides a useful robustness test. The crucial question here was whether the group effect is best placed only on the observed variables, only on `g`, or on `g` plus a very small number of targeted residual paths.
 
