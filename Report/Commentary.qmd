@@ -58,6 +58,12 @@ The multilevel SEM reanalysis pointed in the same general direction. Among the m
 
 Both our reanalyses suggest that the musician advantage is expressed primarily at the latent level, with a clear additional specificity for Melody span and, possibly, a smaller residual effect for Vocabulary. This is not a denial of the original empirical findings, but provides a more parsimonious account within a methodological framework that is better aligned with the current mainstream on individual differences in cognitive abilities. So, the point is not just to adjudicate between “significant” and “nonsignificant” group differences, but to clarify the most appropriate explanatory framework: whether a set of observed scores should be interpreted as a collection of separate outcomes, with their covariance treated as a nuisance to be removed through pragmatic analytic choices, or whether the overall pattern is best understood as the surface expression of true common factor(s). This matters beyond the present article. Large collaborative datasets are a major advance for the field, and their value can be strengthened even further when they are paired with designs that more fully reflect the hierarchical structure of cognitive abilities [@mcgrewCHCTheoryHuman2009]. When indicators present a positive manifold, modeling them jointly can help reveal whether apparently distinct group differences are better interpreted as manifestations of a broader common factor. Therefore, advances in data collection and research practices can and should be matched by equally strong advances in measurement modeling, yielding interpretations that are both more integrated and more theoretically meaningful.
 
+# Supplemental materials and online resources
+
+Additional material containing methodological details, model specifications and fit tables are available in the Supplementary document.
+
+All R code and project files needed to reproduce the present analyses are available at https://github.com/EnricoToffalini/musicians-commentary and are archived in Zenodo at https://doi.org/10.5281/zenodo.19626948 The reanalysis uses the public dataset released with @grassiMusiciansHaveBetter2025, which should be cited as the original data source.
+
 # References
 
 ::: {#refs}
