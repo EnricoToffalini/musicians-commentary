@@ -6,6 +6,86 @@ load("Data/Prepared-data.RData")
 
 #########################################
 
+# INITIAL CHECK OF CORRELATED RESIDUALS
+
+#########################################
+
+model_alt_mv_checkres = "
+level: 1
+g =~ NA*raven + waisvocabulary + raven + nback + spatial_span + digit_span + melody_span
+g ~~ 1*g
+
+level: 2
+waisvocabulary ~ 1
+raven ~ 1 
+nback ~ 1
+digit_span ~ 1
+spatial_span ~ 1 
+melody_span ~ 1
+"
+fit_mv_checkres = sem(model_alt_mv_checkres, data = df, cluster="country")
+fitMeasures(fit_mv_checkres, fi)
+modificationindices(fit_mv_checkres, sort.=T)[1:4,]
+
+model_alt_mv_checkres = "
+level: 1
+g =~ NA*raven + waisvocabulary + raven + nback + spatial_span + digit_span + melody_span
+g ~~ 1*g
+digit_span ~~    melody_span
+
+level: 2
+waisvocabulary ~ 1
+raven ~ 1 
+nback ~ 1
+digit_span ~ 1
+spatial_span ~ 1 
+melody_span ~ 1
+"
+fit_mv_checkres = sem(model_alt_mv_checkres, data = df, cluster="country")
+fitMeasures(fit_mv_checkres, fi)
+modificationindices(fit_mv_checkres, sort.=T)[1:4,]
+
+model_alt_mv_checkres = "
+level: 1
+g =~ NA*raven + waisvocabulary + raven + nback + spatial_span + digit_span + melody_span
+g ~~ 1*g
+spatial_span ~~     digit_span
+digit_span ~~    melody_span
+
+level: 2
+waisvocabulary ~ 1
+raven ~ 1 
+nback ~ 1
+digit_span ~ 1
+spatial_span ~ 1 
+melody_span ~ 1
+"
+fit_mv_checkres = sem(model_alt_mv_checkres, data = df, cluster="country")
+fitMeasures(fit_mv_checkres, fi)
+modificationindices(fit_mv_checkres, sort.=T)[1:4,]
+
+model_alt_mv_checkres = "
+level: 1
+g =~ NA*raven + waisvocabulary + raven + nback + spatial_span + digit_span + melody_span
+g ~~ 1*g
+waisvocabulary ~~ spatial_span
+spatial_span ~~     digit_span
+digit_span ~~    melody_span
+
+level: 2
+waisvocabulary ~ 1
+raven ~ 1 
+nback ~ 1
+digit_span ~ 1
+spatial_span ~ 1 
+melody_span ~ 1
+"
+fit_mv_checkres = sem(model_alt_mv_checkres, data = df, cluster="country")
+fitMeasures(fit_mv_checkres, fi)
+modificationindices(fit_mv_checkres, sort.=T)[1:4,]
+
+#########################################
+
 # FITTING MULTILEVEL MODELS
 
 #########################################

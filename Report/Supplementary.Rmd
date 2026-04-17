@@ -25,13 +25,13 @@ knitr::opts_chunk$set(
   out.width = "92%"
 )
 
-fit_mg <- read.csv("../Tables/Table_FIT_MG.csv", check.names = FALSE)
-fit_mv <- read.csv("../Tables/Table_FIT_MV.csv", check.names = FALSE)
-corr_tab <- read.csv("../Tables/TableCorr.csv", row.names = 1, check.names = FALSE)
+fit_mg = read.csv("../Tables/Table_FIT_MG.csv", check.names = FALSE)
+fit_mv = read.csv("../Tables/Table_FIT_MV.csv", check.names = FALSE)
+corr_tab = read.csv("../Tables/TableCorr.csv", row.names = 1, check.names = FALSE)
 
-fit_mg$Description[fit_mg$Model == "ScalarPartial_1"] <- "Equal loadings and intercepts except Melody span, with equal SES -> g regression"
-fit_mg$Description[fit_mg$Model == "ScalarPartial_2"] <- "ScalarPartial_1 plus equal residual covariances"
-fit_mg$ModelLabel <- c(
+fit_mg$Description[fit_mg$Model == "ScalarPartial_1"] = "Equal loadings and intercepts except Melody span, plus equal SES -> g regression"
+fit_mg$Description[fit_mg$Model == "ScalarPartial_2"] = "ScalarPartial_1 plus equal residual covariances"
+fit_mg$ModelLabel = c(
   "Configural",
   "Metric",
   "Scalar",
@@ -41,19 +41,19 @@ fit_mg$ModelLabel <- c(
   "Strict",
   "Equal latent means"
 )
-fit_mg_show <- fit_mg[, c("ModelLabel", "Description", "ChiSquare", "df", "p", "RMSEA", "CFI", "BIC", "Delta_BIC")]
-names(fit_mg_show)[1] <- "Model"
+fit_mg_show = fit_mg[, c("ModelLabel", "Description", "ChiSquare", "df", "p", "RMSEA", "CFI", "BIC", "Delta_BIC")]
+names(fit_mg_show)[1] = "Model"
 
-fit_mv$ModelLabel <- c(
+fit_mv$ModelLabel = c(
   "Latent g only",
   "Observed variables only",
   "Latent g + broad residual paths",
   "Latent g + targeted residual paths"
 )
-fit_mv_show <- fit_mv[, c("ModelLabel", "Description", "ChiSquare", "df", "p", "RMSEA", "CFI", "BIC", "Delta_BIC")]
-names(fit_mv_show)[1] <- "Model"
+fit_mv_show = fit_mv[, c("ModelLabel", "Description", "ChiSquare", "df", "p", "RMSEA", "CFI", "BIC", "Delta_BIC")]
+names(fit_mv_show)[1] = "Model"
 
-sample_tab <- data.frame(
+sample_tab = data.frame(
   Measure = c("Age (years)", "Years of education", "Family SES"),
   Musicians = c(22.11, 15.88, 50.06),
   Nonmusicians = c(22.15, 15.83, 44.90),
@@ -62,10 +62,28 @@ sample_tab <- data.frame(
   check.names = FALSE
 )
 
-corr_display <- corr_tab
-corr_display[] <- lapply(corr_display, function(x) ifelse(x == "", "", x))
+corr_display = corr_tab
+corr_display[] = lapply(corr_display, function(x) ifelse(x == "", "", x))
+rownames(corr_display) = c(
+  "Vocabulary",
+  "Raven",
+  "n-back",
+  "Digit span",
+  "Spatial span",
+  "Melody span",
+  "Family SES"
+)
+colnames(corr_display) = c(
+  "Vocabulary",
+  "Raven",
+  "n-back",
+  "Digit span",
+  "Spatial span",
+  "Melody span",
+  "Family SES"
+)
 
-mg_key <- data.frame(
+mg_key = data.frame(
   Parameter = c(
     "Latent mean difference in g (musicians - nonmusicians)",
     "Residual mean difference in Melody span intercept",
@@ -82,7 +100,7 @@ mg_key <- data.frame(
   check.names = FALSE
 )
 
-mv_key <- data.frame(
+mv_key = data.frame(
   Parameter = c(
     "Latent group effect on g",
     "Residual group effect on Wechsler Vocabulary",
@@ -100,53 +118,79 @@ mv_key <- data.frame(
 )
 ```
 
-# Overview
+# Introduction
 
-This supplement documents the latent-variable reanalysis accompanying the commentary on *Do Musicians Have Better Short-Term Memory Than Nonmusicians? A Multilab Study* (Grassi et al., 2025). The goal of the reanalysis is not to dispute the original empirical pattern. Rather, it is to ask at what level that pattern is most meaningfully interpreted.
+Grassi et al. (2025)'s multilab study collected the strongest dataset currently available on cognitive differences between musicians and nonmusicians. Their effort greatly advanced the older literature in sample size, coordination across laboratories, and transparency of procedures and analyses. The present reanalysis starts from that same dataset with a more focused question. Once musicians and nonmusicians differ across several cognitive measures, at what level should those differences be interpreted? General or specific abilities? 
 
-We claim that, once the observed cognitive measures are treated as indicators of a shared cognitive ability, musician versus nonmusician differences might be more parsimoniously described as a difference on a general latent factor, `g`, plus a limited amount of remaining task-specific variance.
+That question matters because the relevant measures are not independent of one another. Vocabulary, Raven, n-back, digit span, spatial span, and melody span all capture partly distinct task demands, but they also share variance. According to the mainstream theory on cognitive abilities, shared variance is usually the first target of interpretation, because mean differences observed on individual tasks can reflect a broader difference in common variance rather than a series of separate task-specific effects.
 
-To keep this supplement readable, we report only the information that is substantively necessary for evaluating that claim. Full raw output is intentionally omitted from the main document. The tables in the `/Tables` subfolder and the figures in the `/Figures` subfolder are used directly below.
+Our aim, then, was not to revisit whether the original study detected group differences, it clearly did. The aim was to examine whether those differences are organized mainly at the level of a common latent factor, here labeled `g`, or whether they are better understood as largely independent observed-score effects.
 
-# Data and preliminary checks
+Across both reanalyses reported below, the answer was similar. Most of the broad musician advantage was explained at the latent-factor level. At the same time, Melody span retained a clear and large residual advantage beyond `g`, while Wechsler Vocabulary showed a smaller residual effect in the multilevel robustness model. The resulting picture is therefore more structured than a flat task-by-task summary: a general cognitive difference, plus a limited amount of task-specific variance.
 
-The reanalysis used the same matched sample reported in the target article, namely 600 musicians and 600 nonmusicians. Before moving to latent models, we checked the matching variables and the main covariate included in the SEMs.
+# Method
+
+## Sample and preliminary group comparability
+
+The reanalysis used the same matched sample analyzed in the target article, 600 musicians and 600 nonmusicians.
+
+Before fitting latent models, we rechecked the variables that matter most for comparability across groups.
 
 ```{r table-s1}
 kable(
   sample_tab,
   digits = 2,
-  caption = "Table S1. Preliminary group comparison for matching variables and family SES."
+  caption = "Table S1. Preliminary group comparison for the matching variables and family SES."
 )
 ```
 
-Age and years of education were, as intended, essentially matched across groups. By contrast, family SES was somewhat higher among musicians, with a small standardized difference, $d = 0.34$. Accordingly, SES was carried into the latent models as a covariate rather than treated as ignorable.
+Age and years of education were essentially identical across groups, as intended by the original matching procedure. Family socioeconomic status (SES), however, was somewhat higher among musicians, with a small effect size, $d = 0.34$. For that reason, SES was retained as a covariate in the latent models.
 
-# Why a latent-variable reanalysis is warranted
+## Indicators and preprocessing
 
-The commentary argues that interpretation should start from the well-known tendency of cognitive measures to correlate positively (the *positive manifold* of cognitive abilities). In the present dataset, Raven, vocabulary, n-back, digit span, spatial span, and melody span all show mostly positive associations, and SES is also positively related to the cognitive indicators. In other words, the data exhibit exactly the kind of positive manifold that motivates a common-factor representation.
+The six cognitive indicators entered in the reanalysis were Wechsler Vocabulary, Raven, n-back, Digit span, Spatial span, and Melody span. SES was included as an observed covariate.
+
+Before the SEM analyses, the cognitive indicators and SES were standardized. This makes the model coefficients easier to read, but it also implies that not all effects live on the same scale. In particular, latent mean differences in `g` are expressed in latent standard deviation units because the variance of `g` was fixed to 1, whereas residual intercept shifts for observed variables remain in the standardized observed metric.
+
+## Correlational structure
+
+The data show a modest but clear positive manifold. The cognitive variables are mostly positively correlated, and SES is positively related to the cognitive indicators as well.
 
 ```{r table-s2}
 kable(
   corr_display,
   align = "lccccccc",
-  caption = "Table S2. Exported cross-group correlation matrix for the standardized cognitive indicators and SES. The upper and lower triangles correspond to the two groups as saved by the preprocessing script."
+  caption = "Table S2. Cross-group correlation matrix for the standardized cognitive indicators and family SES. The upper and lower triangles correspond to the two groups."
 )
 ```
 
-The correlations are not identical across groups, but they are similar enough in overall pattern to justify formal invariance testing. For the purposes of the commentary, the key implication is more basic: a task-by-task mean comparison is not the most informative starting point, because part of any observed task difference is likely to reflect shared variance across tasks.
+The magnitude of the correlations is not especially large by the standards of a dedicated intelligence battery, but the overall pattern is consistent enough to motivate a common-factor representation. That point is important for interpretation: once several tasks covary positively, a task-by-task reading is no longer the only natural starting point.
 
-# Modeling strategy
+## Modeling rationale
 
 Two complementary SEM strategies were used.
 
-First, we fitted a **multigroup CFA / invariance sequence**. The latent factor `g` was defined by Raven, Wechsler Vocabulary, n-back, Spatial span, Digit span, and Melody span. The latent variance of `g` was fixed to 1 in both groups. SES was specified as a predictor of `g`. Three residual covariances were included throughout: Vocabulary with Spatial span, Spatial span with Digit span, and Digit span with Melody span. Residual covariances were selected on the baseline model inspecting modification indices. 
+The first was a multigroup confirmatory factor analysis (CFA) sequence comparing musicians and nonmusicians directly. In this framework, the six cognitive scores were treated as indicators of a single latent factor, `g`, and SES was specified as a predictor of `g`. The multigroup design allowed us to examine configural, metric, and scalar invariance, and then to test whether any remaining group difference operated at the latent level.
 
-Second, because the original study was multilab and cross-national, we fitted a **multilevel SEM** with clustering by country. This model cannot reproduce the exact multigroup design simultaneously (in `lavaan`), but it provides a useful robustness test. The crucial question here was whether the group effect is best placed only on the observed variables, only on `g`, or on `g` plus a very small number of targeted residual paths.
+The second was a multilevel SEM with clustering by country. This model could not reproduce the full multigroup design simultaneously, because the required multigroup-plus-multilevel specification was not feasible in `lavaan` for the present case. It provided, however, a useful robustness check that respected the clustered structure of the original dataset more directly.
 
-# Multigroup CFA results
+## How correlated residuals were handled
 
-## Model comparison
+Because the battery had not been assembled primarily as a tightly designed psychometric battery, we did not assume that a one-factor model would absorb every residual dependency among indicators. We therefore began from a simple single-factor specification and inspected residual misfit in a transparent, limited way.
+
+More specifically, we examined modification indices in the baseline factor model and considered adding residual covariances only when three conditions were met: the candidate covariance was among the most prominent sources of misfit, it was substantively plausible, and it improved fit without making the model needlessly opportunistic. We did not continue this process indefinitely. The goal was not to maximize fit mechanically, but to arrive at a stable and interpretable representation of the battery.
+
+This procedure converged on the same small set of residual covariances across the main analyses: Wechsler Vocabulary with Spatial span, Spatial span with Digit span, and Digit span with Melody span. A few additional candidates appeared at isolated steps, but they were weaker or less stable and were not retained. The three selected residual covariances were then carried forward throughout the main multigroup sequence and through the multilevel comparison models. In substantive terms, these residual associations suggest that some pairs of tasks share method or content variance beyond the broad factor, which is unsurprising in a heterogeneous battery of this kind.
+
+## Model comparison logic
+
+Model comparisons were used to guide interpretation, not to select a winner mechanically. We considered approximate fit, BIC, and interpretability jointly. When two models were numerically very close, we privileged the more transparent representation rather than over-reading negligible differences in information criteria.
+
+# Results
+
+## Multigroup CFA
+
+### Model comparison
 
 ```{r table-s3}
 kable(
@@ -158,21 +202,17 @@ kable(
 )
 ```
 
-The multigroup results are structurally clear.
+The multigroup sequence yields a clear pattern. Configural invariance fit well, and metric invariance remained acceptable. This indicates that the general one-factor structure is broadly similar across musicians and nonmusicians.
 
-Configural and metric invariance were both acceptable, which indicates that the one-factor measurement structure is broadly similar across musicians and nonmusicians. Full scalar invariance, however, fit very poorly. This matters, because it shows that the group contrast cannot be reduced to a simple latent mean difference under fully equal intercepts.
+Full scalar invariance, by contrast, fit poorly. Once the Melody-span intercept was freed, fit improved sharply and returned to an acceptable range. Constraining the SES -> `g` regression to equality across groups did not materially worsen fit, and that model remained easier to interpret than the still more constrained alternative that also equated residual covariances. The latter showed a trivially smaller BIC, but the difference was negligible and approximate fit was somewhat worse. For that reason, the preferred multigroup representation was the partial-scalar model with equal SES -> `g` regression.
 
-Once the Melody-span intercept was freed, fit improved dramatically and returned to an acceptable range. Adding the equality constraint on the SES regression did not materially damage fit, and this model remained slightly cleaner than the still more constrained residual-covariance model. Although the latter had the numerically smallest BIC, the difference was trivial ($\Delta$BIC = 0.33), whereas approximate fit was somewhat worse. For interpretation, therefore, the more parsimonious **partial-scalar model with equal SES -> g regression** was retained.
+Finally, constraining the latent means to equality worsened fit again. The most direct reading is that, after accounting for measurement structure and the Melody-span intercept shift, a latent group difference remains.
 
-Finally, when latent means were constrained equal, fit worsened again. This is the central substantive result of the multigroup analysis: after accounting for measurement structure and partial intercept noninvariance, a group difference remains at the latent-factor level.
+### Preferred multigroup model
 
-## Preferred multigroup representation
-
-```{r fig-s1, fig.cap="Figure S1. Preferred multigroup representation. Dual values separated by a slash denote the two groups for group-specific quantities such as residual variances or residual covariances: left values for non-musicians, right values for musicians. Triangles (representing intercepts) indicate where group differences in mean values emerged."}
+```{r fig-s1, fig.cap="Figure S1. Preferred multigroup representation. Dual values separated by a slash denote the two groups for group-specific quantities such as residual variances or residual covariances. Triangles indicate where group differences in mean values emerged."}
 knitr::include_graphics("../Figures/Figure1_MG.png")
 ```
-
-Figure S1 and Table S4 summarize the final substantive picture. The group contrast is represented in two places. First, musicians are higher on the latent factor `g`. Second, Melody span shows a remaining indicator-specific intercept difference that is not absorbed by `g`.
 
 ```{r table-s4}
 kable(
@@ -182,19 +222,17 @@ kable(
 )
 ```
 
-The latent mean difference was approximately 0.51 latent SD units. Because the latent variance of `g` was fixed to 1 in both groups, this contrast can be read directly as a difference of about half a latent standard deviation. At the same time, Melody span retained an additional intercept shift of roughly 0.85 units in the standardized observed metric. Thus, the musical-memory task is not simply another interchangeable indicator of the same group contrast, it contains an obvious residual advantage beyond the general cognitive factor.
+The preferred multigroup model places the group difference in two locations.
 
-The SES effect on `g` was small and positive in both groups, and the standardized coefficients were very similar.
+First, musicians are higher on the latent factor `g`. The estimated latent mean difference is approximately 0.51 latent SD units, so the broad group contrast is of moderate size at the common-factor level.
 
-## Interpretation of the multigroup findings
+Second, Melody span retains an additional intercept shift of about 0.85 units in the standardized observed metric. This means that the musician advantage is not exhausted by the common factor alone. A sizable task-specific difference remains on the indicator that is most directly related to musical material.
 
-The broad musician advantage in the cognitive battery is largely captured by a single latent dimension. However, the failure of full scalar invariance also shows that not every group difference should be read as a pure reflection of `g`. Melody span carries additional group-related variance, which is exactly what one would expect from a task that is closest to musical expertise.
+SES predicts `g` positively in both groups, and the standardized effects are very similar. Thus, the main conclusion of the multigroup analysis is not simply that musicians score higher overall, but that the broad difference is organized primarily at the latent level, with Melody span showing clear residual noninvariance beyond that general difference.
 
-This pattern is theoretically preferable to a flat task-by-task reading. Instead of saying that musicians have separate advantages in several partially disconnected memory tasks, the latent model suggests a more parsimonious account: a general cognitive difference plus one especially salient music-specific residual deviation.
+## Multilevel SEM
 
-# Multilevel SEM results
-
-## Model comparison
+### Model comparison
 
 ```{r table-s5}
 kable(
@@ -206,13 +244,15 @@ kable(
 )
 ```
 
-The multilevel models serve as a robustness check under a design that partly respects the clustered structure of the original dataset. The results again point to a mixed but clearly ordered solution.
+The multilevel models were intended as a robustness check under a specification that partly respected the clustered structure of the original dataset. Here too, the ordering of models was informative.
 
-A model placing the group effect only on `g` fit poorly. A model placing all group differences only at the observed-variable level fit much better. However, the best BIC was obtained by the targeted hybrid model, which combined a latent group effect on `g` with direct residual paths only to Wechsler Vocabulary and Melody span. This is exactly the pattern one would expect if the main contrast is general but not perfectly exhaustive.
+A model placing the group effect only on `g` fit poorly. A model placing all group effects only on the observed variables fit much better. The best BIC, however, was obtained by the more selective hybrid model in which group predicted the latent factor `g` and only two residual observed paths, one to Wechsler Vocabulary and one to Melody span.
 
-## Preferred multilevel representation
+This pattern suggests that neither extreme is fully satisfactory. A pure latent-only account leaves too much systematic residual variation unexplained, whereas a pure observed-variable account is less parsimonious than needed. The targeted hybrid model sits between these extremes and provides the cleanest summary of the data.
 
-```{r fig-s2, fig.cap="Figure S2. Preferred multilevel SEM representation. The sign of the raw group coefficients depends on the coding of the group variable; the diagram displays the effects in the direction favoring musicians."}
+### Preferred multilevel model
+
+```{r fig-s2, fig.cap="Figure S2. Preferred multilevel SEM representation. The sign of the raw group coefficients depends on the coding of the group variable. The diagram displays the effects in the direction favoring musicians."}
 knitr::include_graphics("../Figures/Figure2_MV.png")
 ```
 
@@ -220,21 +260,38 @@ knitr::include_graphics("../Figures/Figure2_MV.png")
 kable(
   mv_key,
   digits = 3,
-  caption = "Table S6. Key standardized effects from the preferred multilevel model. Absolute values are reported for ease of interpretation, because the sign depends on the chosen coding of the group variable."
+  caption = "Table S6. Key standardized effects from the preferred multilevel model. Absolute values are reported for ease of interpretation because the sign depends on the chosen coding of the group variable."
 )
 ```
 
-In the preferred multilevel model, the group effect on `g` was substantial, about 0.42 SD in standardized terms. Beyond that latent effect, there was only a small residual path to vocabulary and a larger residual path to Melody span. SES again predicted `g` positively.
+In the preferred multilevel model, the standardized group effect on `g` is about 0.42 SD. Beyond that, only two residual observed effects are retained: a small effect for Wechsler Vocabulary and a clearly larger one for Melody span. SES again predicts `g` positively.
 
-This result converges with the multigroup CFA while not being identical to it. The multilevel model still says that the main group contrast sits at the common-factor level. Yet it also suggests that a small amount of indicator-specific variance remains, concentrated especially in Melody span and, to a lesser extent, vocabulary.
+The multilevel model therefore reinforces the main conclusion of the multigroup analysis while adding a small refinement. Most of the musician advantage is captured by the common factor, but not all of it. Melody span remains the clearest residual deviation, and vocabulary shows a weaker task-specific effect under the multilevel specification.
 
-# Integrative interpretation
+# Discussion
 
-Taken together, the two reanalyses support the same broad conclusion.
+Across both analytic strategies, the same broad picture emerges. The musician versus nonmusician contrast in this battery is not well summarized as a loose collection of separate observed-score differences. It is described more coherently as a difference that lies primarily at the level of shared variance among the tasks.
 
-The musician versus nonmusician contrast in this battery is not best described as a collection of separate advantages in verbal, visuospatial, executive, and musical short-term memory tasks. A more coherent and parsimonious reading is that musicians differ primarily on a **general cognitive factor** defined by the shared variance among the tasks. Once this common factor is modeled, the only clearly substantial residual deviation is the expected one, namely Melody span. A smaller vocabulary-specific deviation appears in the multilevel model, but it is much weaker than the latent effect and clearly secondary to it.
+That conclusion matters because it changes the psychological interpretation. When the same participants show small-to-moderate advantages across several correlated tasks, the first question is not whether each task reveals its own independent substantive effect. The first question is whether the apparent multiplicity of effects mainly reflects a single broader dimension. In the present data, the answer appears to be yes.
 
-# Reproducibility note
+At the same time, the latent-factor account is not exhaustive. Melody span clearly carries residual group-related variance beyond `g`, and that is theoretically unsurprising. If any indicator were expected to preserve a task-specific musician advantage after modeling common variance, it would be the measure most directly tied to musical memory. The smaller vocabulary effect that appears in the multilevel model is more tentative and should be treated as secondary to the main latent difference.
 
-This RMarkDown output is concise and does not feature all R analyses that were performed. Also, the file reuses the precomputed tables stored in `/Tables` and the diagrams stored in `/Figures`, rather than re-running the full SEM workflow during knitting. However, the full R code for reproducibility is available via the GitHub repository: https://github.com/EnricoToffalini/musicians-commentary 
+Taken together, the reanalyses therefore support a structured interpretation of the target article's findings. Musicians do not simply outperform nonmusicians on one isolated music task, nor do the data require a story in which each cognitive measure carries an equally distinct advantage. The pattern is better described as a moderate difference in broad shared cognitive variance, accompanied by a more specific residual advantage in Melody span.
+
+## Limits
+
+The reanalysis also has limits.
+
+First, the positive manifold is present but not especially strong, weaker than one would typically expect in a proper intelligence battery. The latent factor extracted here should therefore be read pragmatically, as a summary of shared variance in this particular set of indicators, and not necessarily coinciding with the general mental ability underlying intelligence. 
+
+Second, the battery was not originally designed around an explicit psychometric measurement model. Some residual dependencies among tasks were therefore unsurprising, and the retained correlated residuals should be understood in that light.
+
+Third, the multilevel analysis is a robustness check rather than a full multigroup-plus-multilevel solution. It addresses clustering by country, but it cannot answer every measurement-invariance question simultaneously.
+
+
+# Reproducibility
+
+You can find the full repository at the following URL: `https://github.com/EnricoToffalini/musicians-commentary`
+
+The present document reads precomputed tables in `/Tables` and figures from `/Figures` subfolders from that repository. The corresponding data-preparation and full modeling, reproducible scripts are stored in the `/R` subfolder. Data was placed in the `/Data` subfolder, and correspondes to the original `dat-clean` dataset assembled by Grassi et al. (2025).
 

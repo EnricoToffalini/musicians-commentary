@@ -6,6 +6,36 @@ load("Data/Prepared-data.RData")
 
 #########################################
 
+# INITIAL CHECK OF CORRELATED RESIDUALS
+
+#########################################
+
+modelcheckres = "
+g =~ NA*raven + waisvocabulary + nback + spatial_span + digit_span + melody_span
+g ~~ c(1,1)*g
+g ~ ses_nuclear_family
+"
+fitcheckres = cfa(modelcheckres, df, group="group")
+fitMeasures(fitcheckres, fi)
+modificationindices(fitcheckres, sort.=T)[1:4,]
+
+modelcheckres = paste0(modelcheckres,"\n digit_span ~~ melody_span")
+fitcheckres = cfa(modelcheckres, df, group="group")
+fitMeasures(fitcheckres, fi)
+modificationindices(fitcheckres, sort.=T)[1:4,]
+
+modelcheckres = paste0(modelcheckres,"\n waisvocabulary ~~ spatial_span")
+fitcheckres = cfa(modelcheckres, df, group="group")
+fitMeasures(fitcheckres, fi)
+modificationindices(fitcheckres, sort.=T)[1:4,]
+
+modelcheckres = paste0(modelcheckres,"\n spatial_span ~~ digit_span")
+fitcheckres = cfa(modelcheckres, df, group="group")
+fitMeasures(fitcheckres, fi)
+modificationindices(fitcheckres, sort.=T)[1:4,]
+
+#########################################
+
 # FITTING MULTIGROUP INVARIANCE MODELS
 
 #########################################
@@ -16,8 +46,8 @@ g ~~ c(1,1)*g
 g ~ ses_nuclear_family
 
 waisvocabulary ~~ spatial_span
-digit_span ~~ spatial_span 
 digit_span ~~ melody_span
+spatial_span ~~ digit_span
 "
 fitConfigural = cfa(model, df, group="group")
 fitMeasures(fitConfigural, fi)
