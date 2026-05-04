@@ -1,0 +1,21 @@
+\begin{figure*}[hbt]
+\ifnextchar[{\eatarg}{}
+
+
+\caption{\label{fig-1}Final models representations. Panel A presents the
+preferred multigroup invariance model; dual values separated by a slash
+refer to nonmusicians and musicians, respectively. Panel B presents the
+preferred multilevel SEM with country-level clustering; group paths are
+shown in the direction favoring musicians. In both panels, rectangles
+denote observed variables, circles indicate latent variables, triangles
+mark estimated group differences in means or intercepts. All reported
+coefficients are statistically significant with p \textless{} 0.05. SES
+= Socio-Economic Status.}
+
+\centering{
+
+\includegraphics[width=1\linewidth,height=\textheight,keepaspectratio]{../Figures/Figure1ab.png}
+
+}
+
+\end{figure*}
