@@ -241,4 +241,3 @@ write.csv(fit_table_MV,"Tables/Table_FIT_MV.csv")
 
 writeLines(capture.output(sessionInfo()), "sessionInfo.txt")
 
-
